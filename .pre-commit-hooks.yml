@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: check-docstring-first
+      - id: check-json
+      - id: pretty-format-json
+        args: [--autofix, --no-sort-keys]
+      - id: check-added-large-files
+      - id: check-yaml
+      - id: debug-statements
+      - id: end-of-file-fixer
+  # Run the Ruff linter.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.1.1
+    hooks:
+      # Run the Ruff linter.
+      - id: ruff
+        args: [ --fix ]
+      # Run the Ruff formatter.
+      - id: ruff-format
+
+exclude: (?x)(^data/)
