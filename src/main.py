@@ -1,8 +1,5 @@
 import nest_asyncio
 import uvicorn
-from config.llama_index_config import LlamaIndexConfig
-from config.vector_store_index_config import VectorStoreIndexConfig
-from env import settings
 from fastapi import FastAPI
 from llama_index.core import StorageContext
 from llama_index.core.base.base_query_engine import BaseQueryEngine
@@ -14,6 +11,9 @@ from llama_index.storage.index_store.redis import RedisIndexStore
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_parse import LlamaParse
 
+from src.config.llama_index_config import LlamaIndexConfig
+from src.config.vector_store_index_config import VectorStoreIndexConfig
+from src.env import settings
 from src.routers.chat_router import ChatRouter
 from src.routers.ingest_router import IngestRouter
 from src.services.document_service import DocumentService
