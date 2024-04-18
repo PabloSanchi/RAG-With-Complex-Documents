@@ -39,6 +39,7 @@ class IngestRouter(BaseRouter):
             )
         finally:
             temp.flush()
+            temp.close()
 
         return JSONResponse(
             status_code=200,
