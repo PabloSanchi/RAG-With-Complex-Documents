@@ -1,8 +1,7 @@
 import shutil
 import tempfile
-from typing import Annotated
 
-from fastapi import File, UploadFile
+from fastapi import UploadFile
 from fastapi.responses import JSONResponse
 from llama_index.core.indices.base import BaseIndex
 
