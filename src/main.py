@@ -10,6 +10,7 @@ from llama_index.postprocessor.flag_embedding_reranker import FlagEmbeddingReran
 from llama_index.storage.index_store.redis import RedisIndexStore
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_parse import LlamaParse
+from starlette.middleware.cors import CORSMiddleware
 
 from src.config.llama_index_config import LlamaIndexConfig
 from src.config.vector_store_index_config import VectorStoreIndexConfig
@@ -33,6 +34,14 @@ class Main:
     @classmethod
     def _generate_app(cls) -> FastAPI:
         app: FastAPI = FastAPI(title="Retrieval-Augmented Generation With Complex Documents", version="0.0.1")
+
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
 
         LlamaIndexConfig.init()
 
@@ -58,7 +67,7 @@ class Main:
         reranker: FlagEmbeddingReranker = settings.llama_cloud.get_reranker()
         streaming_query_engine: BaseQueryEngine = index.as_query_engine(
             streaming=True,
-            similarity_top_k=3,
+            similarity_top_k=10,
             node_postprocessors=[reranker]
         )
 
