@@ -10,9 +10,9 @@ class DocumentService:
         self.parser = parser
         self.node_parser = MarkdownElementNodeParser(workers=8)
 
-    async def load_data(self, document: str, index: BaseIndex) -> None:
+    def load_data(self, document: str, index: BaseIndex) -> None:
         """Load data into the given index."""
-        documents = await self.parser.aload_data(document)
+        documents = self.parser.load_data(document)
 
         nodes = self.node_parser.get_nodes_from_documents(documents)
         base_nodes, objects = self.node_parser.get_nodes_and_objects(nodes)
