@@ -16,7 +16,7 @@ class VectorStoreIndexConfig:
             return load_index_from_storage(storage_context)
         except ValueError as err:
             if str(err) == "No index in storage context, check if you specified the right persist_dir.":
-                index = VectorStoreIndex .from_vector_store(storage_context.vector_store)
+                index = VectorStoreIndex.from_vector_store(storage_context.vector_store)
                 index.storage_context.persist()
                 return index
             else:
