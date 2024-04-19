@@ -1,7 +1,8 @@
+import shutil
 import tempfile
 from typing import Annotated
 
-from fastapi import File
+from fastapi import File, UploadFile
 from fastapi.responses import JSONResponse
 from llama_index.core.indices.base import BaseIndex
 
@@ -24,24 +25,18 @@ class IngestRouter(BaseRouter):
             description='Add a document to the index'
         )
 
-    async def add_document(self, file: Annotated[bytes, File()]) -> JSONResponse:
+    async def add_document(self, file: UploadFile) -> JSONResponse: # Annotated[bytes, File()]
         """Add a document to the index."""
 
-        temp = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
-        temp.write(file)
+        temp = tempfile.NamedTemporaryFile(delete=True, suffix=".pdf")
+        shutil.copyfileobj(file.file, temp)
 
         try:
-            await self.document_service.load_data(temp.name, self.index)
+            self.document_service.load_data(temp.name, self.index)
         except Exception as e:
-            return JSONResponse(
-                status_code=400,
-                content={'message': f'Error: {e}'}
-            )
+            return JSONResponse(status_code=400, content={'message': f'Error: {e}'})
         finally:
             temp.flush()
             temp.close()
 
-        return JSONResponse(
-            status_code=200,
-            content={'message': 'Document added successfully'}
-        )
+        return JSONResponse(status_code=200, content={'message': 'Document added successfully'})
